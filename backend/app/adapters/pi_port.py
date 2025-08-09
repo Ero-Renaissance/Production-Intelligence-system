@@ -1,3 +1,9 @@
+# app/adapters/pi_port.py
+from typing import Protocol
 
+class PiSystemPort(Protocol):
+    def get_stream_summary(self, web_id: str, start: str, end: str, interval: str) -> dict: ...
+    def get_recorded(self, web_id: str, start: str, end: str) -> list[dict]: ...
+    def get_current_values(self, web_ids: list[str]) -> dict[str, dict]: ...
 
 

@@ -1,0 +1,103 @@
+===============================================================================
+FRONT-END-ONLY TECHNICAL REQUIREMENT SPECIFICATION (TRS)
+FOR THE "PRODUCTION GAP & CARGO FORECAST" WEB APP
+===============================================================================
+(Deployment target: **Azure Static Web Apps**.  Back-end will eventually be
+Python-based ML system, but is **out of scope** for this sprint. The UI will 
+consume **mock APIs** so the front-end can be built, tested, and deployed 
+independently.)
+
+CONTENTS
+1.  Project Overview (front-end scope only)
+2.  Tech Stack & Key Libraries
+3.  Directory / Module Layout
+4.  Mock Data Interfaces & Stubs
+5.  Component Specifications
+6.  Routing & Navigation Flow
+7.  State-Management & Data-Fetching Pattern
+8.  Styling & Design Tokens
+9.  Accessibility & Internationalisation
+10. Performance Budgets
+11. Testing & Continuous Integration
+12. Azure Deployment Notes
+13. Definition of Done (DoD)
+14. Intelligent Automation Requirements
+15. One-Shot Build Prompt
+===============================================================================
+
+1.  PROJECT OVERVIEW
+-------------------------------------------------------------------------------
+Build a **stand-alone, responsive, accessible React + TailwindCSS SPA** that
+lets operations staff:
+
+• Visualise end-to-end production flow  
+  (Wells → Flowlines → Facilities → Pipelines → Receiving Nodes).  
+• Detect throughput gaps & see roll-up KPIs, gap-driver lists, cargo forecasts.  
+• Display AI-generated optimisation actions for **Oil, Export Gas, Domestic Gas**
+  streams (data delivered via mocked REST + WebSocket).
+• Support automated gap analysis, constraint detection, and optimization recommendations.
+• Enable intelligent cargo forecasting and terminal endurance calculations.
+• Facilitate automated report generation and status tracking.
+
+Back-end intelligence is **NOT implemented here**; we only consume **mock JSON
++ mock WebSocket events** so the UI can be fully built and demoed.
+
+-------------------------------------------------------------------------------
+14. INTELLIGENT AUTOMATION REQUIREMENTS
+-------------------------------------------------------------------------------
+The front-end must support these automated capabilities:
+
+Gap Analysis Display:
+• Real-time visualization of ML-detected deviations
+• Automatic gap categorization display
+• Impact assessment metrics
+• Historical trend visualization
+• Pattern recognition results presentation
+
+Cargo & Endurance Forecasting:
+• Dynamic terminal inventory visualization
+• Automated cargo availability forecasts
+• Real-time endurance calculations display
+• Integration with weather and vessel data
+• Historical performance trending
+
+Constraint Response Interface:
+• Real-time constraint notification system
+• Optimization scenario comparison views
+• Implementation tracking dashboard
+• Resource requirement displays
+• Safety compliance indicators
+
+Status Tracking System:
+• Automated status update displays
+• Solution effectiveness metrics
+• Learning system feedback visualization
+• Pattern recognition result presentation
+
+Report Generation Interface:
+• Automated report viewing
+• Recommendation review interface
+• Implementation approval workflow
+• Feedback collection system
+• Historical report archival
+
+Data Requirements Display:
+• Real-time data visualization
+• Historical data trending
+• Equipment specification access
+• Operational constraint displays
+• Resource availability tracking
+
+Integration Points:
+• Control system data display
+• Historian database visualization
+• Maintenance system integration
+• Weather service data presentation
+• Vessel scheduling interface
+
+Security Features:
+• Role-based access control
+• Audit trail visualization
+• Change management interface
+• Data validation indicators
+• System health monitoring 

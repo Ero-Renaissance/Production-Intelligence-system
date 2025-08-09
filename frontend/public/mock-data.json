@@ -1,0 +1,1069 @@
+{
+  "nodes": [
+    {
+      "id": "well-001",
+      "name": "Alpha-7 Production Well",
+      "type": "well",
+      "constraintLevel": "normal",
+      "throughput": {
+        "current": 2850,
+        "capacity": 3200,
+        "unit": "bbl/day",
+        "efficiency": 89.1
+      },
+      "streams": {
+        "oil": {
+          "rate": 2850,
+          "unit": "bbl/day"
+        },
+        "exportGas": {
+          "rate": 1200,
+          "unit": "mcf/day"
+        },
+        "water": {
+          "rate": 145,
+          "unit": "bbl/day"
+        }
+      },
+      "operationalData": {
+        "flowingTubingHeadPressure": 1450,
+        "flowingTubingHeadTemperature": 185,
+        "chokeSetting": 32,
+        "lastTestDate": "2024-01-15T06:00:00Z",
+        "lastTestBSW": 4.8,
+        "lastTestGOR": 421
+      },
+      "location": {
+        "lat": 27.7845,
+        "lng": -91.2365,
+        "region": "Gulf of Mexico"
+      },
+      "status": "Active",
+      "priority": 8,
+      "completionDate": "2019-03-15T00:00:00Z",
+      "reservoirId": "reservoir-alpha",
+      "lastUpdated": "2024-01-20T10:30:00Z"
+    },
+    {
+      "id": "well-002",
+      "name": "Beta-3 Production Well",
+      "type": "well",
+      "constraintLevel": "warning",
+      "throughput": {
+        "current": 1950,
+        "capacity": 2800,
+        "unit": "bbl/day",
+        "efficiency": 69.6
+      },
+      "streams": {
+        "oil": {
+          "rate": 1950,
+          "unit": "bbl/day"
+        },
+        "exportGas": {
+          "rate": 850,
+          "unit": "mcf/day"
+        },
+        "water": {
+          "rate": 310,
+          "unit": "bbl/day"
+        }
+      },
+      "operationalData": {
+        "flowingTubingHeadPressure": 1120,
+        "flowingTubingHeadTemperature": 178,
+        "chokeSetting": 28,
+        "lastTestDate": "2024-01-18T06:00:00Z",
+        "lastTestBSW": 13.7,
+        "lastTestGOR": 436
+      },
+      "location": {
+        "lat": 27.7923,
+        "lng": -91.2187,
+        "region": "Gulf of Mexico"
+      },
+      "status": "Active",
+      "priority": 6,
+      "completionDate": "2020-07-22T00:00:00Z",
+      "reservoirId": "reservoir-beta",
+      "lastUpdated": "2024-01-20T10:28:15Z"
+    },
+    {
+      "id": "flowline-001",
+      "name": "Main Flowline A",
+      "type": "flowline",
+      "constraintLevel": "warning",
+      "throughput": {
+        "current": 8500,
+        "capacity": 12000,
+        "unit": "bbl/day",
+        "efficiency": 70.8
+      },
+      "streams": {
+        "oil": {
+          "rate": 8500,
+          "unit": "bbl/day"
+        },
+        "exportGas": {
+          "rate": 3600,
+          "unit": "mcf/day"
+        }
+      },
+      "operationalData": {
+        "arrivalPressure": 850,
+        "inletTemperature": 165,
+        "outletTemperature": 158
+      },
+      "connections": {
+        "sourceId": "manifold-001",
+        "destinationId": "flowstation-001"
+      },
+      "location": {
+        "region": "Offshore Platform Delta"
+      },
+      "status": "Flowing",
+      "lastUpdated": "2024-01-20T10:29:45Z"
+    },
+    {
+      "id": "manifold-001",
+      "name": "Central Manifold Alpha",
+      "type": "manifold",
+      "constraintLevel": "normal",
+      "throughput": {
+        "current": 4800,
+        "capacity": 6000,
+        "unit": "bbl/day",
+        "efficiency": 80.0
+      },
+      "streams": {
+        "oil": {
+          "rate": 4800,
+          "unit": "bbl/day"
+        },
+        "exportGas": {
+          "rate": 2050,
+          "unit": "mcf/day"
+        }
+      },
+      "operationalData": {
+        "headerPressure": 950,
+        "temperature": 172
+      },
+      "location": {
+        "lat": 27.7889,
+        "lng": -91.2276,
+        "region": "Platform Alpha"
+      },
+      "status": "In Service",
+      "lastUpdated": "2024-01-20T10:31:00Z"
+    },
+    {
+      "id": "flowstation-001",
+      "name": "Central Processing Facility",
+      "type": "facility",
+      "constraintLevel": "critical",
+      "throughput": {
+        "current": 15200,
+        "capacity": 25000,
+        "unit": "bbl/day",
+        "efficiency": 60.8
+      },
+      "streams": {
+        "oil": {
+          "rate": 15200,
+          "unit": "bbl/day"
+        },
+        "exportGas": {
+          "rate": 8900,
+          "unit": "mcf/day"
+        },
+        "domesticGas": {
+          "rate": 2100,
+          "unit": "mcf/day"
+        }
+      },
+      "operationalData": {
+        "totalOilExportRate": 15200,
+        "totalGasExportRate": 11000,
+        "systemPressure": 485,
+        "separatorCount": 3,
+        "pumpCount": 4,
+        "availablePumps": 3
+      },
+      "location": {
+        "lat": 27.8234,
+        "lng": -91.1256,
+        "region": "Central Hub"
+      },
+      "status": "Online",
+      "lastUpdated": "2024-01-20T10:31:12Z"
+    },
+    {
+      "id": "separator-001",
+      "name": "High Pressure Separator",
+      "type": "separator",
+      "constraintLevel": "critical",
+      "throughput": {
+        "current": 6800,
+        "capacity": 8500,
+        "unit": "bbl/day",
+        "efficiency": 80.0
+      },
+      "operationalData": {
+        "operatingPressure": 485,
+        "liquidLevel": 78.5,
+        "temperature": 168,
+        "gasOutletPressure": 480
+      },
+      "parentFacility": "flowstation-001",
+      "status": "In Service",
+      "lastUpdated": "2024-01-20T10:31:05Z"
+    },
+    {
+      "id": "pump-001",
+      "name": "Export Pump A",
+      "type": "pump",
+      "constraintLevel": "normal",
+      "throughput": {
+        "current": 7600,
+        "capacity": 10000,
+        "unit": "bbl/day",
+        "efficiency": 76.0
+      },
+      "operationalData": {
+        "dischargePressure": 1250,
+        "suctionPressure": 85,
+        "vibrationLevel": 2.8,
+        "amperage": 125,
+        "rpm": 1785
+      },
+      "parentFacility": "flowstation-001",
+      "status": "Running",
+      "lastUpdated": "2024-01-20T10:30:45Z"
+    },
+    {
+      "id": "pump-002",
+      "name": "Export Pump B",
+      "type": "pump",
+      "constraintLevel": "offline",
+      "throughput": {
+        "current": 0,
+        "capacity": 10000,
+        "unit": "bbl/day",
+        "efficiency": 0
+      },
+      "operationalData": {
+        "dischargePressure": 0,
+        "suctionPressure": 0,
+        "vibrationLevel": 0,
+        "amperage": 0,
+        "rpm": 0
+      },
+      "parentFacility": "flowstation-001",
+      "status": "Under Maintenance",
+      "lastUpdated": "2024-01-20T08:15:00Z"
+    },
+    {
+      "id": "pipeline-001",
+      "name": "Export Pipeline Alpha",
+      "type": "pipeline",
+      "constraintLevel": "normal",
+      "throughput": {
+        "current": 14800,
+        "capacity": 18000,
+        "unit": "bbl/day",
+        "efficiency": 82.2
+      },
+      "streams": {
+        "oil": {
+          "rate": 14800,
+          "unit": "bbl/day"
+        }
+      },
+      "operationalData": {
+        "inletPressure": 1245,
+        "outletPressure": 185,
+        "temperature": 145,
+        "maxCapacity": 18000,
+        "leakDetectionStatus": "Normal"
+      },
+      "connections": {
+        "sourceId": "flowstation-001",
+        "destinationId": "terminal-001"
+      },
+      "pipelineType": "Delivery Line",
+      "location": {
+        "region": "Export Corridor"
+      },
+      "lastUpdated": "2024-01-20T10:32:00Z"
+    },
+    {
+      "id": "compressor-station-001",
+      "name": "Gas Compression Station Alpha",
+      "type": "compressor-station",
+      "constraintLevel": "normal",
+      "throughput": {
+        "current": 45000,
+        "capacity": 60000,
+        "unit": "mcf/day",
+        "efficiency": 75.0
+      },
+      "streams": {
+        "exportGas": {
+          "rate": 32000,
+          "unit": "mcf/day"
+        },
+        "domesticGas": {
+          "rate": 13000,
+          "unit": "mcf/day"
+        }
+      },
+      "operationalData": {
+        "suctionPressure": 485,
+        "dischargePressure": 1050,
+        "temperature": 195,
+        "compressorCount": 3,
+        "runningCompressors": 2
+      },
+      "destinationNetwork": "LNG Feed Gas",
+      "location": {
+        "lat": 27.8156,
+        "lng": -91.1089,
+        "region": "Gas Processing Hub"
+      },
+      "status": "Online",
+      "lastUpdated": "2024-01-20T10:31:30Z"
+    },
+    {
+      "id": "gas-plant-001",
+      "name": "Gas Processing Plant Beta",
+      "type": "gas-plant",
+      "constraintLevel": "normal",
+      "throughput": {
+        "current": 28000,
+        "capacity": 35000,
+        "unit": "mcf/day",
+        "efficiency": 80.0
+      },
+      "streams": {
+        "exportGas": {
+          "rate": 25200,
+          "unit": "mcf/day"
+        },
+        "domesticGas": {
+          "rate": 2800,
+          "unit": "mcf/day"
+        }
+      },
+      "operationalData": {
+        "salesGasOutlet": 25200,
+        "outletWaterContent": 4.2,
+        "inletPressure": 1050,
+        "outletPressure": 1000
+      },
+      "location": {
+        "lat": 27.8201,
+        "lng": -91.0987,
+        "region": "Gas Processing Hub"
+      },
+      "status": "Online",
+      "lastUpdated": "2024-01-20T10:31:45Z"
+    },
+    {
+      "id": "terminal-001",
+      "name": "Port Arthur Export Terminal",
+      "type": "terminal",
+      "constraintLevel": "normal",
+      "throughput": {
+        "current": 14800,
+        "capacity": 25000,
+        "unit": "bbl/day",
+        "efficiency": 59.2
+      },
+      "operationalData": {
+        "currentInventory": 2850000,
+        "dailyReceipts": 14800,
+        "tankCount": 8,
+        "availableCapacity": 1150000
+      },
+      "location": {
+        "lat": 29.8833,
+        "lng": -93.9300,
+        "region": "Texas Gulf Coast"
+      },
+      "lastUpdated": "2024-01-20T10:32:15Z"
+    },
+    {
+      "id": "receiving-nlng",
+      "name": "NLNG Plant",
+      "type": "receiving-node",
+      "constraintLevel": "normal",
+      "throughput": {
+        "current": 25200,
+        "capacity": 30000,
+        "unit": "mcf/day",
+        "efficiency": 84.0
+      },
+      "streams": {
+        "exportGas": {
+          "rate": 25200,
+          "unit": "mcf/day"
+        }
+      },
+      "operationalData": {
+        "landingPressure": 995,
+        "requiredPressure": 950,
+        "temperature": 85
+      },
+      "facilityType": "LNG Plant",
+      "location": {
+        "lat": 29.7601,
+        "lng": -95.3693,
+        "region": "Houston Ship Channel"
+      },
+      "lastUpdated": "2024-01-20T10:32:30Z"
+    }
+  ],
+  "equipment": {
+    "storageTanks": [
+      {
+        "id": "tank-001",
+        "name": "Crude Storage Tank #1",
+        "terminalId": "terminal-001",
+        "capacity": 500000,
+        "currentInventory": 475000,
+        "productBSW": 0.8,
+        "apiGravity": 31.2,
+        "status": "Ready",
+        "location": "Tank Farm A",
+        "lastUpdated": "2024-01-20T10:15:00Z"
+      },
+      {
+        "id": "tank-002",
+        "name": "Crude Storage Tank #2",
+        "terminalId": "terminal-001",
+        "capacity": 500000,
+        "currentInventory": 425000,
+        "productBSW": 1.2,
+        "apiGravity": 30.8,
+        "status": "Filling",
+        "location": "Tank Farm A",
+        "lastUpdated": "2024-01-20T10:15:00Z"
+      },
+      {
+        "id": "tank-003",
+        "name": "Crude Storage Tank #3",
+        "terminalId": "terminal-001",
+        "capacity": 500000,
+        "currentInventory": 380000,
+        "productBSW": 0.9,
+        "apiGravity": 31.5,
+        "status": "Ready",
+        "location": "Tank Farm B",
+        "lastUpdated": "2024-01-20T10:15:00Z"
+      }
+    ],
+    "meters": [
+      {
+        "id": "meter-001",
+        "name": "Well Alpha-7 Oil Meter",
+        "locationId": "well-001",
+        "meterType": "oil",
+        "instantaneousFlowRate": 118.75,
+        "unit": "bbl/hr",
+        "status": "OK",
+        "dataQualityFlag": "Good",
+        "lastCalibration": "2024-01-01T00:00:00Z",
+        "lastUpdated": "2024-01-20T10:30:00Z"
+      },
+      {
+        "id": "meter-002",
+        "name": "Well Alpha-7 Gas Meter",
+        "locationId": "well-001",
+        "meterType": "gas",
+        "instantaneousFlowRate": 50.0,
+        "unit": "mcf/hr",
+        "status": "OK",
+        "dataQualityFlag": "Good",
+        "lastCalibration": "2024-01-01T00:00:00Z",
+        "lastUpdated": "2024-01-20T10:30:00Z"
+      },
+      {
+        "id": "meter-003",
+        "name": "Export Pipeline Flow Meter",
+        "locationId": "pipeline-001",
+        "meterType": "oil",
+        "instantaneousFlowRate": 616.67,
+        "unit": "bbl/hr",
+        "status": "OK",
+        "dataQualityFlag": "Good",
+        "lastCalibration": "2023-12-15T00:00:00Z",
+        "lastUpdated": "2024-01-20T10:32:00Z"
+      }
+    ]
+  },
+  "performanceAlerts": [
+    {
+      "id": "alert-001",
+      "equipmentId": "separator-001",
+      "equipmentType": "Separator",
+      "alertType": "Threshold Breach",
+      "description": "High Pressure Separator operating pressure approaching critical limit",
+      "alertTimestamp": "2024-01-20T10:25:00Z",
+      "status": "New",
+      "severity": "Critical",
+      "currentValue": 485,
+      "threshold": 500,
+      "unit": "psi",
+      "notes": "Pressure trending upward for past 2 hours"
+    },
+    {
+      "id": "alert-002",
+      "equipmentId": "pump-002",
+      "equipmentType": "Pump",
+      "alertType": "Status Change",
+      "description": "Export Pump B taken offline for scheduled maintenance",
+      "alertTimestamp": "2024-01-20T08:15:00Z",
+      "status": "Resolved",
+      "severity": "Warning",
+      "notes": "Scheduled maintenance window - 8 hours duration"
+    },
+    {
+      "id": "alert-003",
+      "equipmentId": "well-002",
+      "equipmentType": "Well",
+      "alertType": "Production Deviance",
+      "description": "Beta-3 well production rate 30% below expected",
+      "alertTimestamp": "2024-01-20T06:30:00Z",
+      "status": "Investigating",
+      "severity": "Warning",
+      "currentValue": 1950,
+      "threshold": 2800,
+      "unit": "bbl/day",
+      "notes": "Potential wellbore restriction - workover crew mobilizing"
+    }
+  ],
+  "downtimeEvents": [
+    {
+      "id": "downtime-001",
+      "equipmentId": "pump-002",
+      "equipmentType": "Pump",
+      "downtimeReason": "Planned Maintenance",
+      "startTime": "2024-01-20T08:00:00Z",
+      "endTime": "2024-01-20T16:00:00Z",
+      "durationHours": 8,
+      "description": "Scheduled impeller replacement and bearing maintenance",
+      "impactedProduction": 7500,
+      "unit": "bbl/day"
+    },
+    {
+      "id": "downtime-002",
+      "equipmentId": "compressor-003",
+      "equipmentType": "Compressor",
+      "downtimeReason": "Unplanned Trip",
+      "startTime": "2024-01-19T14:30:00Z",
+      "endTime": "2024-01-19T18:45:00Z",
+      "durationHours": 4.25,
+      "description": "High vibration trip - coupling alignment issue resolved",
+      "impactedProduction": 15000,
+      "unit": "mcf/day"
+    }
+  ],
+  "kpiThresholds": [
+    {
+      "id": "threshold-001",
+      "equipmentId": "separator-001",
+      "kpiName": "Operating Pressure",
+      "upperLimit": 500,
+      "lowerLimit": 300,
+      "unit": "psi",
+      "alertSeverity": "Critical"
+    },
+    {
+      "id": "threshold-002",
+      "equipmentId": "pump-001",
+      "kpiName": "Vibration Level",
+      "upperLimit": 5.0,
+      "lowerLimit": 0.5,
+      "unit": "mm/s",
+      "alertSeverity": "Warning"
+    },
+    {
+      "id": "threshold-003",
+      "equipmentId": "well-001",
+      "kpiName": "Production Rate",
+      "upperLimit": 3200,
+      "lowerLimit": 2400,
+      "unit": "bbl/day",
+      "alertSeverity": "Warning"
+    }
+  ],
+  "wellProductionModels": [
+    {
+      "id": "model-001",
+      "wellId": "well-001",
+      "modelType": "Exponential",
+      "initialRate": 3200,
+      "declineRatePercentage": 8.5,
+      "economicLimit": 150,
+      "lastUpdated": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "model-002",
+      "wellId": "well-002", 
+      "modelType": "Hyperbolic",
+      "initialRate": 2800,
+      "declineRatePercentage": 12.3,
+      "economicLimit": 100,
+      "lastUpdated": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "summary": {
+    "timestamp": "2024-01-20T10:30:00Z",
+    "totalThroughput": {
+      "current": 67800,
+      "capacity": 98000,
+      "unit": "bbl/day",
+      "efficiency": 69.2,
+      "trend": "down",
+      "changePercent": -2.8
+    },
+    "streamTotals": {
+      "oil": {
+        "production": 67800,
+        "unit": "bbl/day",
+        "trend": "down",
+        "changePercent": -3.2
+      },
+      "exportGas": {
+        "production": 57200,
+        "unit": "mcf/day",
+        "trend": "stable",
+        "changePercent": 0.5
+      },
+      "domesticGas": {
+        "production": 15900,
+        "unit": "mcf/day",
+        "trend": "up",
+        "changePercent": 1.8
+      }
+    },
+    "systemHealth": {
+      "nodesOnline": 11,
+      "totalNodes": 13,
+      "criticalIssues": 1,
+      "warningIssues": 3
+    },
+    "terminalInventory": {
+      "currentStock": 2850000,
+      "capacity": 4000000,
+      "fillLevel": 71.25,
+      "daysToFull": 8.5
+    },
+    "lastUpdated": "2024-01-20T10:30:00Z"
+  },
+  "gapDrivers": [
+    {
+      "id": "gap-001",
+      "nodeId": "flowstation-001",
+      "nodeName": "Central Processing Facility",
+      "gapType": "constraint",
+      "description": "Separator capacity bottleneck limiting overall facility throughput",
+      "impact": {
+        "lostProduction": 9800,
+        "unit": "bbl/day",
+        "percentage": 39.2
+      },
+      "affectedStreams": ["oil", "export-gas"],
+      "duration": {
+        "start": "2024-01-18T12:00:00Z",
+        "estimated_end": "2024-01-25T08:00:00Z",
+        "totalHours": 164
+      },
+      "priority": "critical",
+      "status": "active",
+      "rootCause": "Separator operating at maximum safe pressure - requires optimization",
+      "recommendedActions": ["Pressure optimization", "Flow redistribution"],
+      "lastUpdated": "2024-01-20T10:30:00Z"
+    },
+    {
+      "id": "gap-002",
+      "nodeId": "flowline-001",
+      "nodeName": "Main Flowline A",
+      "gapType": "throughput",
+      "description": "Partial blockage in flowline reducing flow efficiency",
+      "impact": {
+        "lostProduction": 3500,
+        "unit": "bbl/day",
+        "percentage": 29.2
+      },
+      "affectedStreams": ["oil"],
+      "duration": {
+        "start": "2024-01-19T08:15:00Z",
+        "estimated_end": "2024-01-22T12:00:00Z",
+        "totalHours": 79.75
+      },
+      "priority": "high",
+      "status": "acknowledged",
+      "rootCause": "Hydrate formation or debris accumulation",
+      "recommendedActions": ["Pipeline pigging", "Chemical injection"],
+      "lastUpdated": "2024-01-20T09:45:00Z"
+    },
+    {
+      "id": "gap-003",
+      "nodeId": "well-002",
+      "nodeName": "Beta-3 Production Well",
+      "gapType": "efficiency",
+      "description": "Well production decline exceeding expected curve",
+      "impact": {
+        "lostProduction": 850,
+        "unit": "bbl/day",
+        "percentage": 30.4
+      },
+      "affectedStreams": ["oil"],
+      "duration": {
+        "start": "2024-01-15T06:00:00Z",
+        "totalHours": 124.5
+      },
+      "priority": "medium",
+      "status": "active",
+      "rootCause": "Possible near-wellbore restriction or formation damage",
+      "recommendedActions": ["Well stimulation", "Workover evaluation"],
+      "lastUpdated": "2024-01-20T10:15:00Z"
+    },
+    {
+      "id": "gap-004",
+      "nodeId": "pump-002",
+      "nodeName": "Export Pump B",
+      "gapType": "maintenance",
+      "description": "Pump offline for scheduled maintenance reducing export capacity",
+      "impact": {
+        "lostProduction": 7500,
+        "unit": "bbl/day",
+        "percentage": 30.0
+      },
+      "affectedStreams": ["oil"],
+      "duration": {
+        "start": "2024-01-20T08:00:00Z",
+        "estimated_end": "2024-01-20T16:00:00Z",
+        "totalHours": 8
+      },
+      "priority": "low",
+      "status": "resolved",
+      "rootCause": "Scheduled impeller replacement",
+      "recommendedActions": ["Completed maintenance"],
+      "lastUpdated": "2024-01-20T16:00:00Z"
+    }
+  ],
+  "cargoForecast": [
+    {
+      "id": "forecast-001",
+      "timestamp": "2024-01-21T00:00:00Z",
+      "forecastType": "oil",
+      "volume": {
+        "amount": 950000,
+        "unit": "barrels"
+      },
+      "confidence": 92,
+      "source": "ai-prediction",
+      "vesselDetails": {
+        "vessel": "Tanker Alpha-7",
+        "destination": "Rotterdam",
+        "loadingPort": "Port Arthur Terminal",
+        "eta": "2024-01-21T06:00:00Z",
+        "laycanStart": "2024-01-21T00:00:00Z",
+        "laycanEnd": "2024-01-23T23:59:59Z"
+      },
+      "loadingRate": 15000,
+      "loadingDuration": 63.33,
+      "qualitySpecs": {
+        "maxBSW": 0.5,
+        "minAPIGravity": 30.0,
+        "maxSulfur": 0.8
+      }
+    },
+    {
+      "id": "forecast-002",
+      "timestamp": "2024-01-25T00:00:00Z",
+      "forecastType": "oil",
+      "volume": {
+        "amount": 1200000,
+        "unit": "barrels"
+      },
+      "confidence": 87,
+      "source": "historical",
+      "vesselDetails": {
+        "vessel": "Tanker Beta-3",
+        "destination": "Singapore",
+        "loadingPort": "Port Arthur Terminal",
+        "eta": "2024-01-25T08:00:00Z",
+        "laycanStart": "2024-01-25T00:00:00Z",
+        "laycanEnd": "2024-01-27T23:59:59Z"
+      },
+      "loadingRate": 18000,
+      "loadingDuration": 66.67,
+      "qualitySpecs": {
+        "maxBSW": 0.5,
+        "minAPIGravity": 29.5,
+        "maxSulfur": 1.0
+      }
+    },
+    {
+      "id": "forecast-003",
+      "timestamp": "2024-01-28T00:00:00Z",
+      "forecastType": "lng",
+      "volume": {
+        "amount": 165000,
+        "unit": "cubic_meters"
+      },
+      "confidence": 78,
+      "source": "ai-prediction",
+      "vesselDetails": {
+        "vessel": "LNG Carrier Gamma",
+        "destination": "Tokyo",
+        "loadingPort": "Sabine Pass",
+        "eta": "2024-01-28T12:00:00Z",
+        "laycanStart": "2024-01-28T00:00:00Z",
+        "laycanEnd": "2024-01-30T23:59:59Z"
+      },
+      "loadingRate": 8000,
+      "loadingDuration": 20.625,
+      "qualitySpecs": {
+        "minHeatingValue": 1035,
+        "maxWaterContent": 0.5,
+        "maxCO2Content": 50
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "constraint-001",
+      "nodeId": "separator-001",
+      "nodeName": "High Pressure Separator",
+      "eventType": "pressure",
+      "severity": "critical",
+      "stream": "oil",
+      "description": "Separator pressure approaching maximum operating limit",
+      "details": {
+        "currentValue": 485,
+        "threshold": 500,
+        "unit": "psi",
+        "deviation": 97.0,
+        "trendDirection": "increasing",
+        "rateOfChange": 2.5
+      },
+      "timestamp": "2024-01-20T10:25:00Z",
+      "estimatedResolution": "2024-01-20T16:00:00Z",
+      "actionRequired": true,
+      "impactedEquipment": ["separator-001", "pump-001", "flowstation-001"],
+      "mitigationSteps": [
+        "Reduce upstream flow rates",
+        "Optimize downstream pressure",
+        "Monitor pressure trend closely"
+      ]
+    },
+    {
+      "id": "constraint-002",
+      "nodeId": "flowline-001",
+      "nodeName": "Main Flowline A",
+      "eventType": "flow",
+      "severity": "warning",
+      "stream": "oil",
+      "description": "Flow rate below optimal range due to partial restriction",
+      "details": {
+        "currentValue": 8500,
+        "threshold": 10000,
+        "unit": "bbl/day",
+        "deviation": 85.0,
+        "trendDirection": "stable",
+        "rateOfChange": 0.1
+      },
+      "timestamp": "2024-01-20T09:45:00Z",
+      "estimatedResolution": "2024-01-22T12:00:00Z",
+      "actionRequired": false,
+      "impactedEquipment": ["flowline-001", "manifold-001"],
+      "mitigationSteps": [
+        "Schedule pipeline pigging",
+        "Evaluate chemical injection program",
+        "Monitor pressure differential"
+      ]
+    },
+    {
+      "id": "constraint-003",
+      "nodeId": "pipeline-001",
+      "nodeName": "Export Pipeline Alpha",
+      "eventType": "temperature",
+      "severity": "info",
+      "stream": "oil",
+      "description": "Temperature within normal range but trending upward",
+      "details": {
+        "currentValue": 145,
+        "threshold": 160,
+        "unit": "°F",
+        "deviation": 90.6,
+        "trendDirection": "increasing",
+        "rateOfChange": 1.2
+      },
+      "timestamp": "2024-01-20T10:15:00Z",
+      "actionRequired": false,
+      "impactedEquipment": ["pipeline-001"],
+      "mitigationSteps": [
+        "Continue monitoring",
+        "Check insulation integrity",
+        "Verify flow rates"
+      ]
+    },
+    {
+      "id": "constraint-004",
+      "nodeId": "well-002",
+      "nodeName": "Beta-3 Production Well",
+      "eventType": "flow",
+      "severity": "warning",
+      "stream": "oil",
+      "description": "Well production rate significantly below capacity",
+      "details": {
+        "currentValue": 1950,
+        "threshold": 2400,
+        "unit": "bbl/day",
+        "deviation": 81.25,
+        "trendDirection": "decreasing",
+        "rateOfChange": -1.8
+      },
+      "timestamp": "2024-01-20T06:30:00Z",
+      "estimatedResolution": "2024-01-25T08:00:00Z",
+      "actionRequired": true,
+      "impactedEquipment": ["well-002"],
+      "mitigationSteps": [
+        "Well performance analysis",
+        "Evaluate workover options",
+        "Consider artificial lift optimization"
+      ]
+    }
+  ],
+  "optimisations": [
+    {
+      "id": "opt-001",
+      "stream": "oil",
+      "type": "pressure_adjust",
+      "title": "Optimize Separator Pressure Settings",
+      "description": "Reduce separator pressure by 15 psi to increase throughput while maintaining safety margins. This will allow higher flow rates through the facility and reduce upstream pressure constraints.",
+      "impact": {
+        "estimatedGain": 1200,
+        "unit": "bbl/day",
+        "confidence": 89,
+        "timeframe": "immediate",
+        "roi": 180,
+        "paybackPeriod": "2 months"
+      },
+      "implementation": {
+        "effort": "low",
+        "estimatedCost": 2500,
+        "currency": "USD",
+        "requiredSkills": ["process_engineer", "operator"],
+        "estimatedDuration": "2 hours",
+        "riskLevel": "low",
+        "safetyConsiderations": "Verify all downstream equipment pressure ratings"
+      },
+      "affectedNodes": ["separator-001", "flowstation-001"],
+      "status": "pending",
+      "priority": 9,
+      "createdAt": "2024-01-20T08:30:00Z",
+      "validUntil": "2024-01-22T08:30:00Z",
+      "dependencies": [],
+      "approvalRequired": false
+    },
+    {
+      "id": "opt-002",
+      "stream": "export-gas",
+      "type": "flow_redistribution",
+      "title": "Redistribute Gas Flow Through Secondary Line",
+      "description": "Reroute 30% of gas flow through backup pipeline to optimize overall system efficiency and reduce pressure drop across the primary line.",
+      "impact": {
+        "estimatedGain": 450,
+        "unit": "mcf/day",
+        "confidence": 76,
+        "timeframe": "4 hours",
+        "roi": 145,
+        "paybackPeriod": "6 weeks"
+      },
+      "implementation": {
+        "effort": "medium",
+        "estimatedCost": 8500,
+        "currency": "USD",
+        "requiredSkills": ["gas_technician", "control_room_operator"],
+        "estimatedDuration": "6 hours",
+        "riskLevel": "medium",
+        "safetyConsiderations": "Verify secondary line integrity and capacity"
+      },
+      "affectedNodes": ["compressor-station-001", "gas-plant-001"],
+      "status": "acknowledged",
+      "priority": 7,
+      "createdAt": "2024-01-20T07:15:00Z",
+      "validUntil": "2024-01-21T07:15:00Z",
+      "dependencies": ["Line pressure test", "Valve inspection"],
+      "approvalRequired": true
+    },
+    {
+      "id": "opt-003",
+      "stream": "domestic-gas",
+      "type": "maintenance_schedule",
+      "title": "Advance Compressor Maintenance Window",
+      "description": "Move planned maintenance 2 weeks earlier to prevent efficiency degradation and potential unplanned shutdown during peak demand period.",
+      "impact": {
+        "estimatedGain": 180,
+        "unit": "mcf/day",
+        "confidence": 94,
+        "timeframe": "2 weeks",
+        "roi": 230,
+        "paybackPeriod": "1 month"
+      },
+      "implementation": {
+        "effort": "high",
+        "estimatedCost": 45000,
+        "currency": "USD",
+        "requiredSkills": ["mechanical_engineer", "maintenance_crew", "safety_coordinator"],
+        "estimatedDuration": "3 days",
+        "riskLevel": "low",
+        "safetyConsiderations": "Hot work permits, confined space entry procedures"
+      },
+      "affectedNodes": ["compressor-station-001"],
+      "status": "implementing",
+      "priority": 6,
+      "createdAt": "2024-01-19T14:20:00Z",
+      "validUntil": "2024-01-26T14:20:00Z",
+      "dependencies": ["Spare parts availability", "Contractor mobilization"],
+      "approvalRequired": true
+    },
+    {
+      "id": "opt-004",
+      "stream": "oil",
+      "type": "capacity_upgrade",
+      "title": "Install Additional Export Pump",
+      "description": "Install a third export pump to provide redundancy and increase overall export capacity during maintenance windows.",
+      "impact": {
+        "estimatedGain": 10000,
+        "unit": "bbl/day",
+        "confidence": 95,
+        "timeframe": "3 months",
+        "roi": 350,
+        "paybackPeriod": "18 months"
+      },
+      "implementation": {
+        "effort": "high",
+        "estimatedCost": 285000,
+        "currency": "USD",
+        "requiredSkills": ["project_engineer", "mechanical_engineer", "electrical_technician"],
+        "estimatedDuration": "6 weeks",
+        "riskLevel": "medium",
+        "safetyConsiderations": "Major modification - full risk assessment required"
+      },
+      "affectedNodes": ["flowstation-001", "pipeline-001"],
+      "status": "pending",
+      "priority": 8,
+      "createdAt": "2024-01-19T10:00:00Z",
+      "validUntil": "2024-02-19T10:00:00Z",
+      "dependencies": ["Capital approval", "Engineering design", "Procurement"],
+      "approvalRequired": true
+    }
+  ]
+} 
