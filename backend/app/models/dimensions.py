@@ -45,6 +45,7 @@ class Facility(Base):
 
     hub: Mapped[Hub] = relationship(back_populates="facilities")
     wells: Mapped[list["Well"]] = relationship(back_populates="facility")
+    equipment: Mapped[list["BaseEquipment"]] = relationship("BaseEquipment", back_populates="facility")
 
 
 WellStatus = Enum(
