@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+httpx
+# Data & DB
+SQLAlchemy>=2.0
+alembic>=1.13
+psycopg[binary]>=3.1
+# Testing
+pytest
+pytest-asyncio 

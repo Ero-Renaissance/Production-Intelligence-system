@@ -1,0 +1,590 @@
+Data Requirements Document: Production Performance Monitoring System
+Version: 1.6 Date: July 12, 2025 Author: Osahon
+1. Introduction
+This document outlines the complete data requirements for the design and implementation of an Oil and Gas Production Performance Monitoring System. The primary objectives of this system are to:
+Automatically identify, flag, and manage production underperformance across the entire value chain.
+Forecast terminal inventory and predict readiness for export cargos.
+Support production optimization by recommending operational adjustments to meet system constraints and maximize output.
+This document will serve as the foundational blueprint for creating the detailed Entity-Relationship Diagram (ERD) and the subsequent database schema. It details all required entities, their attributes, the relationships between them, and the sourcing requirements for each data point.
+2. Entity Definitions and Attributes
+This section details each entity, its attributes, and its data sourcing requirements.
+2.1. Well
+Description: Represents a physical wellbore and its production potential. It is the fundamental source of production.
+Attribute Name
+Description
+Key
+Well_ID
+Unique identifier for the well.
+PK
+Well_Name
+Common, human-readable name.
+
+
+Well_Location
+Geographic coordinates.
+
+
+Well_Type
+Type of well (e.g., 'Oil', 'Gas', 'Water').
+
+
+Well_Status
+Current operational state (e.g., 'Active', 'Shut-In').
+
+
+Well_Priority
+A ranking (e.g., 1-10) to prioritize wells during optimization.
+
+
+Completion_Date
+Date the well was completed and ready for production.
+
+
+Flowing_Tubing_Head_Pressure
+Real-time pressure at the wellhead.
+
+
+Flowing_Tubing_Head_Temperature
+Real-time temperature at the wellhead.
+
+
+Choke_Setting
+Current size of the choke opening.
+
+
+Last_Test_Date
+Date of the last official performance test.
+
+
+Last_Test_Oil_Rate
+Measured oil rate from the last test ().
+
+
+Last_Test_Gas_Rate
+Measured gas rate from the last test (Mscf/d).
+
+
+Last_Test_Water_Rate
+Measured water rate from the last test (bbl/d).
+
+
+Last_Test_BSW
+Basic Sediment & Water percentage from the last test.
+
+
+Last_Test_GOR
+Gas-Oil Ratio from the last test.
+
+
+Reservoir_ID
+Links to the Reservoir entity it produces from.
+FK
+
+
+2.2. Daily_Production
+Description: Tracks the daily allocated production values for each well, representing its actual performance.
+Attribute Name
+Description
+Key
+Daily_Production_ID
+Unique identifier for the daily record.
+PK
+Well_ID
+Links to the Well that is producing.
+FK
+Production_Date
+The specific date of the production record.
+
+
+Allocated_Oil_Rate
+Calculated or metered oil rate for that day (bbl/d).
+
+
+Allocated_Gas_Rate
+Calculated or metered gas rate for that day (Mscf/d).
+
+
+Allocated_Water_Rate
+Calculated or metered water rate for that day (bbl/d).
+
+
+Data_Source
+How the rate was determined ('Well Meter', 'Allocation System').
+
+
+
+
+2.3. Performance_Alert
+Description: A log of all automatically generated operational alerts for any piece of equipment.
+Attribute Name
+Description
+Key
+Alert_ID
+Unique identifier for each alert.
+PK
+Equipment_ID
+Links to the equipment that triggered the alert.
+FK
+Equipment_Type
+The type of equipment ('Well', 'Pump', 'Compressor', 'Pipeline').
+
+
+Alert_Type
+The nature of the alert ('Production Deviance', 'Status Change', 'Threshold Breach').
+
+
+Description
+A text summary of the alert (e.g., "Pump P-101 Tripped").
+
+
+Alert_Timestamp
+Exact date and time the alert was generated.
+
+
+Status
+Current state of the alert ('New', 'Investigating', 'Resolved').
+
+
+Notes
+Field for engineer's comments on cause and resolution.
+
+
+
+
+2.4. Flowline
+Description: A pipeline connecting a single well to a manifold.
+Attribute Name
+Description
+Key
+Flowline_ID
+Unique identifier for the flowline.
+PK
+Source_ID
+The starting point (e.g., Well_ID).
+FK
+Destination_ID
+The endpoint (e.g., Manifold_ID).
+FK
+Status
+'Flowing', 'Shut-In', 'Under Maintenance'.
+
+
+Arrival_Pressure
+Pressure at the end of the flowline.
+
+
+
+
+2.5. Manifold
+Description: A collection point for multiple flowlines before the main process facility.
+Attribute Name
+Description
+Key
+Manifold_ID
+Unique identifier for the manifold.
+PK
+Header_Pressure
+Pressure inside the main collection pipe.
+
+
+Status
+'In Service', 'Bypassed', 'Under Maintenance'.
+
+
+
+
+2.6. Flow Station
+Description: A facility that receives fluid from manifolds and performs initial processing.
+Attribute Name
+Description
+Key
+Flowstation_ID
+Unique identifier for the station.
+PK
+Status
+'Online', 'Shutdown', 'Reduced Capacity'.
+
+
+Total_Oil_Export_Rate
+Measured rate of processed oil leaving the station.
+
+
+Total_Gas_Export_Rate
+Measured rate of gas leaving the station.
+
+
+
+
+2.7. Separator
+Description: A vessel within a facility that separates the fluid stream into its components.
+Attribute Name
+Description
+Key
+Separator_ID
+Unique tag number.
+PK
+Facility_ID
+Links to the parent facility (Flowstation_ID or Plant_ID).
+FK
+Operating_Pressure
+Current pressure inside the vessel.
+
+
+Liquid_Level
+The height of the liquid within the separator.
+
+
+Status
+'In Service', 'Bypassed', 'Offline'.
+
+
+
+
+2.8. Pump
+Description: A device used to move liquids through the facility.
+Attribute Name
+Description
+Key
+Pump_ID
+Unique tag number.
+PK
+Flowstation_ID
+Links to the flow station where it is located.
+FK
+Status
+'Running', 'Stopped', 'Tripped'.
+
+
+Discharge_Pressure
+Pressure at the pump's outlet.
+
+
+Vibration_Level
+Key indicator of mechanical health.
+
+
+
+
+2.9. Meter
+Description: Any device that measures flow rates and serves as a source of truth for production data.
+Attribute Name
+Description
+Key
+Meter_ID
+Unique tag number.
+PK
+Location_ID
+Links to the equipment it's installed on.
+FK
+Status
+'OK', 'Failed', 'Needs Calibration'.
+
+
+Data_Quality_Flag
+'Good', 'Suspect', 'Bad'.
+
+
+Instantaneous_Flow_Rate
+The live, real-time measurement.
+
+
+
+
+
+
+2.10. Pipeline
+Description: A major line connecting facilities (e.g., flow station to terminal).
+Attribute Name
+Description
+Key
+Pipeline_ID
+Unique identifier for the pipeline segment.
+PK
+Pipeline_Type
+'Delivery Line', 'Trunkline'.
+
+
+Source_ID
+Where the pipeline starts (e.g., Flowstation_ID).
+FK
+Destination_ID
+Where the pipeline ends (e.g., Terminal_ID).
+FK
+Max_Capacity
+The maximum flow rate the pipeline is designed to handle.
+
+
+Inlet_Pressure
+Pressure at the start of the line.
+
+
+Outlet_Pressure
+Pressure at the end of the line.
+
+
+Leak_Detection_Status
+'Normal', 'Alert', 'Confirmed Leak'.
+
+
+
+
+2.11. Terminal
+Description: The final storage and export facility for crude oil.
+Attribute Name
+Description
+Key
+Terminal_ID
+Unique identifier for the terminal.
+PK
+Current_Inventory
+Total volume of crude stored across all tanks.
+
+
+Daily_Receipts
+Total volume received in the last 24 hours.
+
+
+
+
+2.12. Storage Tank
+Description: Represents an individual crude oil storage tank within a terminal.
+Attribute Name
+Description
+Key
+Tank_ID
+Unique identifier for the storage tank.
+PK
+Terminal_ID
+Links to the parent terminal.
+FK
+Location
+Physical location within the terminal.
+
+
+Capacity
+The maximum volume of the individual tank.
+
+
+Current_Inventory
+The volume of crude currently in the tank.
+
+
+Product_BSW
+Basic Sediment & Water percentage of the tank's contents.
+
+
+API_Gravity
+The API gravity of the crude in the tank.
+
+
+Status
+'Filling', 'Ready', 'Draining', 'Out of Service'.
+
+
+
+
+2.13. Compressor Station
+Description: A facility for pressurizing gas for transport or use.
+Attribute Name
+Description
+Key
+Station_ID
+Unique ID for the station.
+PK
+Destination_Network
+'Domestic Gas', 'LNG Feed Gas', 'Gas Lift'.
+
+
+
+Sub-Entity: Gas_Compressor: Tracks individual compressor health with attributes like Status ('Running', 'Tripped'), Discharge_Pressure, and Vibration_Level.
+2.14. Gas Plant
+Description: A facility to process and dehydrate gas.
+Attribute Name
+Description
+Key
+Plant_ID
+Unique ID for the plant.
+PK
+Sales_Gas_Outlet
+Volume of dry gas sent to the customer.
+
+
+Plant_Status
+'Online', 'Shutdown'.
+
+
+
+Sub-Entity: Dehydration_Unit: The core process unit. Its key attribute is Outlet_Water_Content, which is critical for performance.
+
+2.15. Receiving Entity
+Description: A generic entity representing a final destination for gas, such as an NLNG plant or another third-party customer.
+Attribute Name
+Description
+Key
+Receiving_Entity_ID
+Unique identifier for the receiving facility.
+PK
+Receiving_Facility_Type
+'NLNG Plant', 'Domestic Gas Customer', etc.
+
+
+Location
+Physical location of the facility.
+
+
+Landing_Pressure
+The required gas pressure at the delivery point.
+
+
+
+
+2.16. Well Production Model
+Description: Stores decline curve analysis parameters for sophisticated, physics-based production forecasting.
+Attribute Name
+Description
+Key
+Model_ID
+Unique identifier for the production model.
+PK
+Well_ID
+Links to the specific well this model describes.
+FK
+Model_Type
+The decline curve model used (e.g., 'Exponential', 'Hyperbolic').
+
+
+Initial_Rate
+The initial production rate (q_i) for the model.
+
+
+Decline_Rate_Percentage
+The nominal decline rate (D) for the model.
+
+
+
+
+2.17. Downtime_Event
+Description: A log of all equipment stoppages, crucial for root cause analysis.
+Attribute Name
+Description
+Key
+Downtime_ID
+Unique ID for the event.
+PK
+Equipment_ID
+The ID of the specific equipment that went down.
+FK
+Start_Time
+Timestamp when the downtime began.
+
+
+End_Time
+Timestamp when the equipment returned to service.
+
+
+Downtime_Reason
+'Planned Maintenance', 'Unplanned Trip'.
+
+
+
+
+2.18. KPI_Threshold
+Description: Stores the operational limits used by the automated alert system, making it flexible and manageable.
+Attribute Name
+Description
+Key
+Threshold_ID
+Unique ID for the specific threshold rule.
+PK
+Equipment_ID
+The equipment this threshold applies to.
+FK
+KPI_Name
+The name of the KPI being tracked.
+
+
+Upper_Limit
+The maximum acceptable value.
+
+
+Lower_Limit
+The minimum acceptable value.
+
+
+Alert_Severity
+'Warning', 'Critical'.
+
+
+
+
+2.19. Optimization_Recommendation
+Description: Stores the output of the optimization engine, providing actionable recommendations to meet system constraints.
+Attribute Name
+Description
+Key
+Recommendation_ID
+Unique ID for the recommendation set.
+PK
+Constraint_ID
+The ID of the constrained asset (e.g., Pipeline_ID).
+FK
+Scenario_Description
+A text description of the optimization problem.
+
+
+Recommended_Actions
+A structured list of actions (e.g., shut-in wells, change chokes).
+
+
+Projected_Gain
+The expected production gain/loss from implementing the actions.
+
+
+Implementation_Date
+The date and time the recommended actions were taken.
+
+
+Actual_Gain
+The measured production gain/loss after implementation.
+
+
+Review_Notes
+Engineer's comments on the outcome and model accuracy.
+
+
+Status
+'New', 'Implemented', 'Rejected', 'Reviewed'.
+
+
+Timestamp
+When the recommendation was generated.
+
+
+
+Data Sourcing
+
+3. Key Entity Relationships
+This section defines the logical connections between the entities.
+Well to Production/Alerts/Models:
+One Well has many Daily_Production records.
+One Well has one Well Production Model.
+Alerts and Equipment:
+Any piece of equipment (e.g., Well, Pump, Compressor) can trigger many Performance_Alerts.
+Gathering System:
+One Well connects to one Flowline.
+Many Flowlines feed into one Manifold.
+One Manifold can feed into either a Flow_Station (for oil) or a Gas_Plant (for gas).
+Facilities and Equipment:
+One Flow Station contains many Separators and Pumps.
+One Gas Plant contains many Dehydration_Units.
+One Compressor Station contains many Gas_Compressors.
+One Terminal contains many Storage_Tanks.
+Transport System:
+A Flow Station can be a source for an oil Pipeline delivering to a Terminal.
+Gas from a Flow Station is sent to a Compressor_Station.
+A Compressor_Station or a Gas_Plant can be a source for a gas Pipeline.
+A gas Pipeline delivers to a Receiving_Entity.
+Supporting Entities:
+The Equipment_ID in Downtime_Event or KPI_Threshold can link to a Well, Pump, Compressor, or any other asset entity.
+An Optimization_Recommendation is linked to a constrained asset (like a Pipeline) and recommends actions on other assets (like Wells).
+

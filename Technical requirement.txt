@@ -1,0 +1,213 @@
+===============================================================================
+FRONT-END-ONLY TECHNICAL REQUIREMENT SPECIFICATION (TRS)
+FOR THE “PRODUCTION GAP & CARGO FORECAST” WEB APP
+===============================================================================
+(Deployment target: **Azure Static Web Apps**.  Back-end will eventually be
+Python, but is **out of scope** for this sprint.  The UI will consume **mock
+APIs** so the front-end can be built, tested, and deployed independently.)
+
+CONTENTS
+1.  Project Overview (front-end scope only)
+2.  Tech Stack & Key Libraries
+3.  Directory / Module Layout
+4.  Mock Data Interfaces & Stubs
+5.  Component Specifications
+6.  Routing & Navigation Flow
+7.  State-Management & Data-Fetching Pattern
+8.  Styling & Design Tokens
+9.  Accessibility & Internationalisation
+10. Performance Budgets
+11. Testing & Continuous Integration
+12. Azure Deployment Notes
+13. Definition of Done (DoD)
+14. One-Shot Build Prompt (copy into any AI-coding tool)
+===============================================================================
+
+1.  PROJECT OVERVIEW
+-------------------------------------------------------------------------------
+Build a **stand-alone, responsive, accessible React + TailwindCSS SPA** that
+lets operations staff:
+
+• Visualise end-to-end production flow  
+  (Wells → Flowlines → Facilities → Pipelines → Receiving Nodes).  
+• Detect throughput gaps & see roll-up KPIs, gap-driver lists, cargo forecasts.  
+• Display AI-generated optimisation actions for **Oil, Export Gas, Domestic Gas**
+  streams (data delivered via mocked REST + WebSocket).  
+
+Back-end intelligence is **NOT implemented here**; we only consume **mock JSON
++ mock WebSocket events** so the UI can be fully built and demoed.
+
+-------------------------------------------------------------------------------
+2.  TECH STACK & KEY LIBRARIES
+-------------------------------------------------------------------------------
+React 18       TypeScript (strict)  
+TailwindCSS v3    React Router v6  
+Axios + React Query (TanStack)  react-apexcharts + ApexCharts  
+lucide-react (icons)        ESLint + Prettier  
+Jest + React Testing Library  Cypress (E2E)  
+**msw** (Mock Service Worker) for REST/WebSocket mocks in dev-build-test
+
+-------------------------------------------------------------------------------
+3.  DIRECTORY / MODULE LAYOUT
+-------------------------------------------------------------------------------
+src/
+  api/              axios.ts, mocks.ts, wsMock.ts
+  components/
+    FlowMap/        FlowMap.tsx, NodeCard.tsx
+    SummaryStats/   SummaryStats.tsx
+    GapDrivers/     GapDriversTable.tsx
+    CargoForecast/  CargoForecastWidget.tsx
+    Optimisation/   OptimisationPanel.tsx, OptimisationCard.tsx
+    Common/         FiltersBar.tsx, ConstraintToast.tsx
+    Layout/         AppShell.tsx, Header.tsx, Sidebar.tsx
+  pages/            Home.tsx, NodeDetail.tsx
+  hooks/            useNodes.ts, useSummary.ts, useOptimisations.ts
+  types/            api.d.ts
+  utils/            unitConversion.ts, colourMaps.ts
+  assets/           logos / placeholders
+  App.tsx
+  main.tsx
+  setupTests.ts
+public/
+  mock-data.json    (seed payloads)
+
+-------------------------------------------------------------------------------
+4.  MOCK DATA INTERFACES & STUBS
+-------------------------------------------------------------------------------
+Interfaces (same as earlier, but **served by MSW**):
+
+• NodeKpi            (GET /api/nodes)  
+• SummaryKpi         (GET /api/summary)  
+• GapDriver          (GET /api/gap-drivers)  
+• CargoForecastPoint (GET /api/cargo-forecast)  
+• ConstraintEvent    (GET /api/constraints?stream=…)  
+• OptimisationAction (GET /api/optimisations?stream=…)  
+
+WebSocket channel **/ws/optimisation-events** is faked with `wsMock.ts`
+(simulates push events every ~15 s).
+
+During development & unit tests, MSW intercepts every request and returns
+data from `public/mock-data.json`.  In production build the fetch base-URL is
+read from **`VITE_API_BASE_URL`**; until a real back-end exists, point that
+variable at the same mock endpoints (e.g. a json-server container).
+
+-------------------------------------------------------------------------------
+5.  COMPONENT SPECIFICATIONS
+-------------------------------------------------------------------------------
+Component             | Purpose / Behaviour
+----------------------|---------------------------------------------------------
+FlowMap               | Horizontal chain of NodeCards; shows live bottleneck overlay.
+NodeCard              | Mini KPI; coloured border by constraintLevel (green/amber/red/grey).
+SummaryStats          | KPI cards with large numerics & ▲▼ arrows vs previous period.
+GapDriversTable       | Sortable table of top gap contributors.
+CargoForecastWidget   | Mini range-bar timeline (ApexCharts).
+OptimisationPanel     | Tabbed pane (Oil / Export Gas / Domestic Gas).
+OptimisationCard      | Shows OptimisationAction; buttons: Acknowledge, Implement.
+ConstraintToast       | Pop-up for CRITICAL ConstraintEvent; keyboard-dismissable.
+NodeDetail page       | Header KPIs, trend chart, issues list, Optimisation tab.
+
+-------------------------------------------------------------------------------
+6.  ROUTING & NAVIGATION FLOW
+-------------------------------------------------------------------------------
+/                → <Home>      (fetches nodes, summary, drivers, forecast,
+                                constraints, optimisations)
+/node/:id        → <NodeDetail>
+Global filter state stored in URL query parameters.
+
+-------------------------------------------------------------------------------
+7.  STATE-MANAGEMENT & DATA-FETCHING PATTERN
+-------------------------------------------------------------------------------
+• Axios instance created in `api/axios.ts` (base-URL from env).  
+• React Query for all GET & PATCH calls; cache keys include filters + stream.  
+• Poll every 60 s.  
+• Subscribe to mock WebSocket (or real one later) in `wsMock.ts`.  
+• Suspense boundaries with Tailwind skeleton loaders.  
+• Mutations (status updates) use optimistic UI updates and invalidate caches.
+
+-------------------------------------------------------------------------------
+8.  STYLING & DESIGN TOKENS
+-------------------------------------------------------------------------------
+Tailwind `tailwind.config.js` adds:  
+  brand-green, brand-amber, brand-red, brand-gray  
+  bg-oil-500 #075985 bg-exportgas-500 #065f46 bg-domgas-500 #6b21a8  
+Cards: `rounded-2xl shadow-md p-4 bg-white dark:bg-slate-800`  
+Typography: `text-2xl` for headline numerics; `text-sm` for tables.  
+Spacing: Tailwind scale only (e.g., `gap-4`, `p-6`).
+
+-------------------------------------------------------------------------------
+9.  ACCESSIBILITY & INTERNATIONALISATION
+-------------------------------------------------------------------------------
+• WCAG 2.1 AA colour contrast.  
+• All interactive items have `aria-label` + `focus-visible:outline`.  
+• Icons paired with `<span className="sr-only">`.  
+• Modal dialogs trap focus.  
+• Text wrapped in `t('key')` for future i18n.
+
+-------------------------------------------------------------------------------
+10. PERFORMANCE BUDGETS
+-------------------------------------------------------------------------------
+Largest Contentful Paint ≤ 2.5 s on 3 G simulated throttling  
+Initial JS bundle        ≤ 250 kB gzipped  
+Runtime FPS              ≥ 60 on mid-tier laptop  
+Code-split by route; lazy-load ApexCharts.
+
+-------------------------------------------------------------------------------
+11. TESTING & CONTINUOUS INTEGRATION
+-------------------------------------------------------------------------------
+• Jest unit tests for utils + hooks.  
+• React Testing Library component tests.  
+• Cypress E2E: visit home → click a node → assert KPI renders.  
+• GitHub Actions:  
+    npm ci  
+    npm run lint  
+    npm test -- --coverage (≥ 80 %)  
+    npm run build  
+
+-------------------------------------------------------------------------------
+12. AZURE DEPLOYMENT NOTES
+-------------------------------------------------------------------------------
+• Build: `npm run build` (Vite) → `dist/`.  
+• Push to GitHub → Azure Static Web Apps workflow auto-deploys.  
+• SWA runtime automatically serves `index.html` for SPA routes.  
+• Environment variables placed in `staticwebapp.config.json` or SWA settings:  
+    `VITE_API_BASE_URL=/mock` (until real Python API becomes available).  
+• Health check:  static file `/healthz` returning “OK”.
+
+-------------------------------------------------------------------------------
+13. DEFINITION OF DONE (DoD)
+-------------------------------------------------------------------------------
+✓ All components & pages render with mock data.  
+✓ Build (`npm ci && npm run build`) succeeds with no errors.  
+✓ Lighthouse ≥ 90 (Performance, Accessibility, Best Practices).  
+✓ Test coverage ≥ 80 %.  
+✓ OptimisationPanel functional with mock events.  
+✓ Deployed preview link on Azure Static Web Apps.
+
+-------------------------------------------------------------------------------
+14. ONE-SHOT BUILD PROMPT
+-------------------------------------------------------------------------------
+Copy **everything between the dashed lines** into your AI-coding tool.
+
+----------------------------  AI BUILD PROMPT  -------------------------------
+You are an expert React + TailwindCSS front-end engineer.
+
+**Goal:** produce a production-ready TypeScript codebase for the “Production Gap
+& Cargo Forecast” SPA, *front-end only*, as detailed in the TRS below.  
+Use functional components, React Query, Mock Service Worker, and Tailwind only
+for styling.  Implement mock WebSocket events.  Meet accessibility, testing,
+and performance targets.
+
+<< PASTE SECTIONS 1–13 OF THIS TRS HERE >>
+
+Strict requirements:
+• Early returns, descriptive names, no inline styles.  
+• All interactive elements are keyboard-accessible with ARIA labels.  
+• Poll REST every 60 s + consume mock WS.  
+• Jest coverage ≥ 80 %, Cypress smoke test.  
+• LCP ≤ 2.5 s; JS bundle ≤ 250 kB gzipped.  
+• Deliver full file tree, key file excerpts, and a README with setup & Azure
+  deployment instructions.  Provide a zipped archive or GitHub link at the end.
+----------------------------  AI BUILD PROMPT  -------------------------------
+===============================================================================
+END OF FRONT-END-ONLY SPEC
+===============================================================================

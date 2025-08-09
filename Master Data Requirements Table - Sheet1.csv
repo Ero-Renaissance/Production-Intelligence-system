@@ -1,0 +1,117 @@
+Entity,Attribute,Description,Data Source,Frequency of Update
+Well,Well_ID,Unique identifier for the well.,Application Logic,As Needed
+Well,Well_Name,"Common, human-readable name.",Energy Component,As Needed
+Well,Well_Location,Geographic coordinates.,Geomatic DB,As Needed
+Well,Well_Type,"Type of well (e.g., 'Oil', 'Gas', 'Water').",eWIPS,As Needed
+Well,Well_Status,"Current operational state (e.g., 'Active', 'Shut-In').",Energy Component,As Needed
+Well,Well_Priority,A ranking  to prioritize wells during optimization.,Application Logic,As Needed
+Well,Completion_Date,Date the well was completed and ready for production.,eWIPS,As Needed
+Well,Flowing_Tubing_Head_Pressure,Real-time pressure at the wellhead.,PI Server,Real-time
+Well,Flowing_Tubing_Head_Temperature,Real-time temperature at the wellhead.,PI Server,Real-time
+Well,Choke_Setting,Current size of the choke opening.,Energy Component or PI,Monthly
+Well,Last_Test_Date,Date of the last official performance test.,Energy Component,Monthly
+Well,Last_Test_Oil_Rate,Measured oil rate from the last test (bbl/d).,Energy Component,Monthly
+Well,Last_Test_Gas_Rate,Measured gas rate from the last test (Mscf/d).,Energy Component,Monthly
+Well,Last_Test_Water_Rate,Measured water rate from the last test (bbl/d).,Energy Component,Monthly
+Well,Last_Test_BSW,Basic Sediment & Water percentage from the last test.,Energy Component,Monthly
+Well,Last_Test_GOR,Gas-Oil Ratio from the last test.,Energy Component,Monthly
+Well,Reservoir_ID,Links to the Reservoir entity it produces from.,,As Needed
+Daily_Production,Daily_Production_ID,Unique identifier for the daily record.,Application Logic,Daily
+Daily_Production,Well_ID,Links to the Well that is producing.,Application Logic,Daily
+Daily_Production,Production_Date,The specific date of the production record.,Application Logic,Daily
+Daily_Production,Allocated_Oil_Rate,Calculated or metered oil rate for that day (bbl/d).,Energy Component,Daily
+Daily_Production,Allocated_Gas_Rate,Calculated or metered gas rate for that day (Mscf/d).,Energy Component,Daily
+Daily_Production,Allocated_Water_Rate,Calculated or metered water rate for that day (bbl/d).,Energy Component,Daily
+Daily_Production,Data_Source,"How the rate was determined ('Well Meter', 'Allocation System').",Energy Component,Daily
+Performance_Alert,Alert_ID,Unique identifier for each alert.,Application Logic,On Detection
+Performance_Alert,Equipment_ID,Links to the equipment that triggered the alert.,Application Logic,On Detection
+Performance_Alert,Equipment_Type,"The type of equipment ('Well', 'Pump', 'Compressor', 'Pipeline').",Application Logic,On Detection
+Performance_Alert,Alert_Type,"The nature of the alert ('Production Deviance', 'Status Change', 'Threshold Breach').",Application Logic,On Detection
+Performance_Alert,Description,"A text summary of the alert (e.g., ""Pump P-101 Tripped"").",Application Logic,On Detection
+Performance_Alert,Alert_Timestamp,Exact date and time the alert was generated.,Application Logic,On Detection
+Performance_Alert,Status,"Current state of the alert ('New', 'Investigating').",,As Needed
+Performance_Alert,Notes,Field for engineer's comments.,,As Needed
+Flowline,Flowline_ID,Unique identifier for the flowline.,PI Server,As Needed
+Flowline,Source_ID,"The starting point (e.g., Well_ID).",PI Server,As Needed
+Flowline,Destination_ID,"The endpoint (e.g., Manifold_ID).",PI server,As Needed
+Flowline,Status,"Flowing', 'Shut-In', 'Under Maintenance'.",PI Server,Real-time
+Flowline,Arrival_Pressure,Pressure at the end of the flowline.,PI Server,Real-time
+Manifold,Manifold_ID,Unique identifier for the manifold.,PI server,As Needed
+Manifold,Header_Pressure,Pressure inside the main collection pipe.,PI Server,Real-time
+Manifold,Status,"In Service', 'Bypassed', 'Under Maintenance'.",PI Server,Real-time
+Flow Station,Flowstation_ID,Unique identifier for the station.,PI Server,As Needed
+Flow Station,Status,"Online', 'Shutdown', 'Reduced Capacity'.",PI Server,Real-time
+Flow Station,Total_Oil_Export_Rate,Measured rate of processed oil leaving the station.,Energy Component,Real-time
+Flow Station,Total_Gas_Export_Rate,Measured rate of gas leaving the station.,Energy Component,Real-time
+Separator,Separator_ID,Unique tag number.,PI Server,As Needed
+Separator,Facility_ID,Links to the parent facility (Flowstation_ID or Plant_ID).,PI Server,As Needed
+Separator,Operating_Pressure,Current pressure inside the vessel.,PI Server,Real-time
+Separator,Liquid_Level,The height of the liquid within the separator.,PI Server,Real-time
+Separator,Status,"In Service', 'Bypassed', 'Offline'.",,Real-time
+Pump,Pump_ID,Unique tag number.,PI Server,As Needed
+Pump,Flowstation_ID,Links to the flow station where it is located.,PI server,As Needed
+Pump,Status,"Running', 'Stopped', 'Tripped'.",PI Server,Real-time
+Pump,Discharge_Pressure,Pressure at the pump's outlet.,PI Server,Real-time
+Pump,Vibration_Level,Key indicator of mechanical health.,Reliability Intelligence System,Real-time
+Meter,Meter_ID,Unique tag number.,PI Server,As Needed
+Meter,Location_ID,Links to the equipment it's installed on.,PI Server,As Needed
+Meter,Status,"OK', 'Failed', 'Needs Calibration'.",PI Server,Real-time
+Meter,Data_Quality_Flag,"Good', 'Suspect', 'Bad'.",PI Server,Real-time
+Meter,Instantaneous_Flow_Rate,"The live, real-time measurement.",PI Server,Real-time
+Pipeline,Pipeline_ID,Unique identifier for the pipeline segment.,Pipeline Monitioring System,As Needed
+Pipeline,Pipeline_Type,"Delivery Line', 'Trunkline'.",[Asset Management System],As Needed
+Pipeline,Source_ID,"Where the pipeline starts (e.g., Flowstation_ID).",PI Server,As Needed
+Pipeline,Destination_ID,"Where the pipeline ends (e.g., Terminal_ID).",Pipeline Monitioring System,As Needed
+Pipeline,Max_Capacity,The maximum flow rate the pipeline is designed to handle.,Engineering Design Documents,As Needed
+Pipeline,Inlet_Pressure,Pressure at the start of the line.,PI Server,Real-time
+Pipeline,Outlet_Pressure,Pressure at the end of the line.,PI Server,Real-time
+Pipeline,Leak_Detection_Status,"Normal', 'Alert', 'Confirmed Leak'.",Pipeline Monitioring System,Real-time
+Terminal,Terminal_ID,Unique identifier for the terminal.,PI server,As Needed
+Terminal,Current_Inventory,Total volume of crude stored across all tanks.,PI Server or SharePoint or Energy Component,Hourly
+Terminal,Daily_Receipts,Total volume received in the last 24 hours.,Energy Component or SharePoint,Daily
+Storage Tank,Tank_ID,Unique identifier for the storage tank.,Energy Component or SharePoint,As Needed
+Storage Tank,Terminal_ID,Links to the parent terminal.,[Asset Management System],As Needed
+Storage Tank,Location,Physical location within the terminal.,[Asset Management System],As Needed
+Storage Tank,Capacity,The maximum volume of the individual tank.,[Engineering Design Documents],As Needed
+Storage Tank,Current_Inventory,The volume of crude currently in the tank.,[Tank Gauging System],Hourly
+Storage Tank,Product_BSW,Basic Sediment & Water percentage of the tank's contents.,SharePoint or Energy Component,Daily
+Storage Tank,API_Gravity,The API gravity of the crude in the tank.,SharePoint or Energy Component,Daily
+Storage Tank,Status,"Filling', 'Ready', 'Draining', 'Out of Service'.",Energy Component or SharePoint,Real-time
+Compressor Station,Station_ID,Unique ID for the station.,PI Server,As Needed
+Compressor Station,Destination_Network,"Domestic Gas', 'LNG Feed Gas', 'Gas Lift'.",Application Logic,As Needed
+Gas Compressor,Compressor_ID,Unique ID for the compressor unit.,PI Server,As Needed
+Gas Compressor,Status,"Running', 'Stopped', 'Tripped'.",PI Server,Real-time
+Gas Compressor,Discharge_Pressure,Pressure of the gas leaving the compressor.,PI Server,Real-time
+Gas Plant,Plant_ID,Unique ID for the plant.,PI Server,As Needed
+Gas Plant,Sales_Gas_Outlet,Volume of dry gas sent to the customer.,Energy Component,Daily
+Dehydration Unit,Unit_ID,Unique ID for the dehydration unit.,PI Server,As Needed
+Dehydration Unit,Outlet_Water_Content,Water content in the gas going out.,PI Server or Energy Component,Daily
+Receiving Entity,Receiving_Entity_ID,Unique identifier for the receiving facility.,PI Server,As Needed
+Receiving Entity,Receiving_Facility_Type,"NLNG Plant', 'Domestic Gas Customer', etc.",PI Server,As Needed
+Receiving Entity,Location,Physical location of the facility.,Application Logic,As Needed
+Receiving Entity,Landing_Pressure,The required gas pressure at the delivery point.,PI Server,Real-time
+Well Production Model,Model_ID,Unique identifier for the production model.,Application Logic,As Needed
+Well Production Model,Well_ID,Links to the specific well this model describes.,Application Logic,As Needed
+Well Production Model,Model_Type,"The decline curve model used (e.g., 'Exponential', 'Hyperbolic').",Manual Entry,As Needed
+Well Production Model,Initial_Rate,The initial production rate (q_i) for the model.,Manual Entry,As Needed
+Well Production Model,Decline_Rate_Percentage,The nominal decline rate (D) for the model.,Manual Entry,As Needed
+Downtime_Event,Downtime_ID,Unique ID for the event.,Application Logic,[Per Event]
+Downtime_Event,Equipment_ID,The ID of the specific equipment that went down.,Application Logic,[Per Event]
+Downtime_Event,Start_Time,Timestamp when the downtime began.,Application Logic,[Per Event]
+Downtime_Event,End_Time,Timestamp when the equipment returned to service.,Application Logic,[Per Event]
+Downtime_Event,Downtime_Reason,"Planned Trip', 'Unplanned Trip'.",Reliability Monitoring System,[Per Event]
+KPI_Threshold,Threshold_ID,Unique ID for the specific threshold rule.,Application Logic,As Needed
+KPI_Threshold,Equipment_ID,The equipment this threshold applies to.,Manual Entry,As Needed
+KPI_Threshold,KPI_Name,The name of the KPI being tracked.,Manual Entry,As Needed
+KPI_Threshold,Upper_Limit,The maximum acceptable value.,Manual Entry,As Needed
+KPI_Threshold,Lower_Limit,The minimum acceptable value.,Manual Entry,As Needed
+KPI_Threshold,Alert_Severity,"Warning', 'Critical'.",Manual Entry,As Needed
+Optimization_Recommendation,Recommendation_ID,Unique ID for the recommendation set.,Application Logic,Per Optimization Run
+Optimization_Recommendation,Constraint_ID,"The ID of the constrained asset (e.g., Pipeline_ID).",Application Logic,Per Optimization Run
+Optimization_Recommendation,Scenario_Description,A text description of the optimization problem.,Application Logic,Per Optimization Run
+Optimization_Recommendation,Recommended_Actions,"A structured list of actions (e.g., shut-in wells).",Application Logic,Per Optimization Run
+Optimization_Recommendation,Projected_Gain,The expected production gain/loss from the actions.,Application Logic,Per Optimization Run
+Optimization_Recommendation,Actual_Gain,The measured production gain/loss after implementation.,Energy Component,Post-Implementation
+Optimization_Recommendation,Review_Notes,Engineer's comments on the outcome and model accuracy.,Manual Entry,As Needed
+Optimization_Recommendation,Status,"New', 'Implemented', 'Rejected'.",Manual Entry,As Needed
+Optimization_Recommendation,Timestamp,When the recommendation was generated.,Application Logic,Per Optimization Run
