@@ -180,12 +180,12 @@ export const SummaryStats: React.FC<SummaryStatsProps> = ({ onAssetClick }) => {
         />
       </div>
 
-      {/* East Asset Networks */}
+      {/* East Asset  */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              East Asset Networks
+              East Asset
             </h2>
             <span className={`px-2 py-1 text-xs font-medium rounded-full ${
               data.assets.east.status === 'normal' 
@@ -249,12 +249,12 @@ export const SummaryStats: React.FC<SummaryStatsProps> = ({ onAssetClick }) => {
         </div>
       </div>
 
-      {/* West Asset Networks */}
+      {/* West Asset */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              West Asset Networks
+              West Asset
             </h2>
             <span className={`px-2 py-1 text-xs font-medium rounded-full ${
               data.assets.west.status === 'normal' 
