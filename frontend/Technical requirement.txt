@@ -1,103 +1,379 @@
 ===============================================================================
-FRONT-END-ONLY TECHNICAL REQUIREMENT SPECIFICATION (TRS)
-FOR THE "PRODUCTION GAP & CARGO FORECAST" WEB APP
+TECHNICAL REQUIREMENT SPECIFICATION (TRS) - PRODUCTION INTELLIGENCE PLATFORM
+FRONTEND APPLICATION
 ===============================================================================
-(Deployment target: **Azure Static Web Apps**.  Back-end will eventually be
-Python-based ML system, but is **out of scope** for this sprint. The UI will 
-consume **mock APIs** so the front-end can be built, tested, and deployed 
-independently.)
+Target Deployment: Azure Static Web Apps with Azure CDN/Front Door
+Backend Integration: FastAPI + Pydantic v2 contracts (see SYSTEM_ARCHITECTURE.md)
+Current Phase: P1 - Contracts & Mocks (Frontend with MSW → P2 Backend Integration)
 
 CONTENTS
-1.  Project Overview (front-end scope only)
-2.  Tech Stack & Key Libraries
-3.  Directory / Module Layout
-4.  Mock Data Interfaces & Stubs
-5.  Component Specifications
-6.  Routing & Navigation Flow
-7.  State-Management & Data-Fetching Pattern
-8.  Styling & Design Tokens
-9.  Accessibility & Internationalisation
-10. Performance Budgets
-11. Testing & Continuous Integration
-12. Azure Deployment Notes
-13. Definition of Done (DoD)
-14. Intelligent Automation Requirements
-15. One-Shot Build Prompt
+1.  Project Overview & Business Context
+2.  Tech Stack & Architecture Alignment  
+3.  API Integration & Contract-First Design
+4.  User Journeys & Role-Based Features
+5.  Component Architecture & Design System
+6.  Routing & Navigation Hierarchy
+7.  State Management & Real-Time Data
+8.  Performance & Reliability Requirements
+9.  Security & Compliance Integration
+10. Testing Strategy & Quality Gates
+11. Deployment & Environment Strategy
+12. Observability & Monitoring
+13. Phased Delivery Alignment
+14. Definition of Done (DoD)
 ===============================================================================
 
-1.  PROJECT OVERVIEW
+1. PROJECT OVERVIEW & BUSINESS CONTEXT
 -------------------------------------------------------------------------------
-Build a **stand-alone, responsive, accessible React + TailwindCSS SPA** that
-lets operations staff:
+Build a **Production Intelligence Platform Frontend** that serves as the primary
+interface for oil and gas production monitoring, gap analysis, and optimization.
 
-• Visualise end-to-end production flow  
-  (Wells → Flowlines → Facilities → Pipelines → Receiving Nodes).  
-• Detect throughput gaps & see roll-up KPIs, gap-driver lists, cargo forecasts.  
-• Display AI-generated optimisation actions for **Oil, Export Gas, Domestic Gas**
-  streams (data delivered via mocked REST + WebSocket).
-• Support automated gap analysis, constraint detection, and optimization recommendations.
-• Enable intelligent cargo forecasting and terminal endurance calculations.
-• Facilitate automated report generation and status tracking.
+### Core Business Value
+• Unified monitoring across Asset → Production Hub → Facility → Well hierarchy
+• Network overlays for Oil, Domestic Gas, Export Gas, and Flared Gas KPIs
+• Real-time gap detection with ML-powered explanations and predictions
+• Terminal operations management with cargo forecasting and endurance tracking
+• Optimization recommendations with closed-loop outcome tracking
 
-Back-end intelligence is **NOT implemented here**; we only consume **mock JSON
-+ mock WebSocket events** so the UI can be fully built and demoed.
+### Target Users & Primary Journeys
+• **Production Monitoring Engineers**: Real-time surveillance, gap detection, rapid response
+• **Performance Leads**: KPI tracking, deferment analysis, target attainment
+• **Production Programmers/Technologists**: Optimization, simulation, scenario analysis  
+• **Terminal Operations**: Cargo readiness, endurance forecasting, export planning
+• **Leadership**: High-level KPIs, trend insights, decision support
 
+### Key User Journeys
+1. "See today's performance": Overview → Asset → Hub → Facility KPIs
+2. "Find and explain gaps": Gap analysis with drivers, streams, timeline
+3. "Get ahead of problems": Predictive alerts for constraints and breaches
+4. "Plan cargo/export": Terminal overview with endurance and readiness forecasts
+5. "Optimize and simulate": Recommended actions with before/after scenarios
+6. "Review outcomes": Track recommendation adoption and realized impact
+
+2. TECH STACK & ARCHITECTURE ALIGNMENT
 -------------------------------------------------------------------------------
-14. INTELLIGENT AUTOMATION REQUIREMENTS
+### Frontend Stack (Contract-First Design)
+• **Framework**: React 18 + TypeScript (strict mode)
+• **Build Tool**: Vite with optimized production builds
+• **Routing**: React Router v6 with nested routes and URL state management
+• **State Management**: TanStack Query (React Query) for server state
+• **Styling**: TailwindCSS with custom design tokens for operations
+• **Validation**: Zod schemas aligned with backend Pydantic v2 contracts
+• **Charts**: ApexCharts for production visualization and trends
+• **Testing**: Jest + React Testing Library + Cypress E2E
+• **Deployment**: Azure Static Web Apps with CDN optimization
+
+### API Integration Strategy
+• **Backend API**: FastAPI with versioned endpoints (/api/v1)
+• **Contracts**: OpenAPI 3.0 specification with Zod client-side validation
+• **Error Handling**: RFC 7807 Problem Details for HTTP APIs
+• **Authentication**: Entra ID OIDC + MSAL.js integration (P6 phase)
+• **Caching**: React Query with Redis-backed backend caching
+• **Real-time**: WebSocket connections for live updates (future)
+
+3. API INTEGRATION & CONTRACT-FIRST DESIGN
 -------------------------------------------------------------------------------
-The front-end must support these automated capabilities:
+### Core API Endpoints (v1)
+```
+GET /api/v1/summary                          # System & asset KPIs with flared gas
+GET /api/v1/assets                           # Asset → Hub → Facility hierarchy  
+GET /api/v1/assets/{assetId}                 # Individual asset drill-down
+GET /api/v1/gap-drivers                      # Top deferment contributors
+GET /api/v1/production-flow                  # Topology (units, facilities, edges)
+GET /api/v1/terminal/{terminalId}/operations # Terminal KPIs & cargo schedule
+GET /api/v1/hubs/{hubId}/performance         # Hub timeseries & events
+GET /api/v1/facilities/{facilityId}/wells    # Well table per facility
+GET /api/v1/wells/{wellId}                   # Well detail & latest data
+GET /api/v1/wells/{wellId}/timeseries        # Well performance history
+```
 
-Gap Analysis Display:
-• Real-time visualization of ML-detected deviations
-• Automatic gap categorization display
-• Impact assessment metrics
-• Historical trend visualization
-• Pattern recognition results presentation
+### Data Contract Standards
+• **Units**: Consistent across all endpoints (bbl/d, mscf/d, kbbl/d, MMbbl)
+• **Timestamps**: ISO 8601 UTC format with timezone handling
+• **Flared Gas**: Always present as KPI default across all network views
+• **Networks**: Oil, Domestic Gas, Export Gas with consistent metrics structure
+• **Terminal KPIs**: capacity(MMbbl), grossStock(MMbbl), readyCrude(kbbl/d), 
+  productionRate(kbbl/d), endurance(days)
 
-Cargo & Endurance Forecasting:
-• Dynamic terminal inventory visualization
-• Automated cargo availability forecasts
-• Real-time endurance calculations display
-• Integration with weather and vessel data
-• Historical performance trending
+### Error Handling & Resilience
+• **Graceful Degradation**: Cached fallbacks during upstream outages
+• **Loading States**: Progressive loading with skeleton screens
+• **Error Boundaries**: Component-level error isolation
+• **Retry Logic**: Exponential backoff for transient failures
+• **Offline Support**: Service worker for critical functionality
 
-Constraint Response Interface:
-• Real-time constraint notification system
-• Optimization scenario comparison views
-• Implementation tracking dashboard
-• Resource requirement displays
-• Safety compliance indicators
+4. USER JOURNEYS & ROLE-BASED FEATURES
+-------------------------------------------------------------------------------
+### Navigation Hierarchy
+```
+Overview Dashboard
+├── Asset (East/West) Performance
+│   ├── Production Hub Performance  
+│   │   ├── Facility Details
+│   │   │   └── Well Table & Details
+│   │   └── Network Analysis (Oil/Gas overlays)
+│   └── Asset-level Gap Analysis
+├── Terminal Operations
+│   ├── Bonny Terminal Operations
+│   ├── Forcados Terminal Operations  
+│   └── Sea Eagle Terminal Operations
+├── Gap Analysis & Optimization
+│   ├── Gap Drivers Table
+│   ├── Constraint Detection
+│   └── Recommendation Tracking
+└── Performance Analytics
+    ├── Predictive Alerts
+    ├── Scenario Simulation
+    └── Outcome Analysis
+```
 
-Status Tracking System:
-• Automated status update displays
-• Solution effectiveness metrics
-• Learning system feedback visualization
-• Pattern recognition result presentation
+### Role-Based UI Features
+• **Production Monitoring**: Real-time dashboards, alert notifications, drill-down navigation
+• **Performance Management**: KPI tracking, trend analysis, target vs actual comparisons
+• **Optimization**: Simulation tools, recommendation reviews, implementation tracking
+• **Terminal Operations**: Cargo scheduling, endurance monitoring, vessel coordination
+• **Leadership**: Executive summaries, high-level trends, risk indicators
 
-Report Generation Interface:
-• Automated report viewing
-• Recommendation review interface
-• Implementation approval workflow
-• Feedback collection system
-• Historical report archival
+5. COMPONENT ARCHITECTURE & DESIGN SYSTEM
+-------------------------------------------------------------------------------
+### Core Component Categories
+```
+Layout Components:
+├── AppShell (Header + Sidebar + Main)
+├── Header (Navigation + User + Notifications)
+├── Sidebar (Hierarchical navigation menu)
+└── PageLayout (Breadcrumbs + Title + Content)
 
-Data Requirements Display:
-• Real-time data visualization
-• Historical data trending
-• Equipment specification access
-• Operational constraint displays
-• Resource availability tracking
+Dashboard Components:
+├── SummaryStats (Asset KPIs with trend indicators)
+├── GapDriversTable (Prioritized gap analysis)
+├── TerminalOperations (KPIs + cargo schedule)
+└── ProductionFlowMap (Visual topology)
 
-Integration Points:
-• Control system data display
-• Historian database visualization
-• Maintenance system integration
-• Weather service data presentation
-• Vessel scheduling interface
+Data Visualization:
+├── TimeSeriesChart (ApexCharts integration)
+├── KPICard (Metric + trend + comparison)
+├── StatusIndicator (Health/constraint states)
+└── NetworkOverlay (Oil/Gas/Flared visualization)
 
-Security Features:
-• Role-based access control
-• Audit trail visualization
-• Change management interface
-• Data validation indicators
-• System health monitoring 
+Interactive Components:
+├── DrillDownTable (Sortable, filterable data)
+├── TimeframeSelector (Period selection)
+├── FilterPanel (Multi-criteria filtering)
+└── ActionPanel (Recommendations + simulation)
+```
+
+### Design System Standards
+• **Color Palette**: 
+  - Oil Network: Blue scale (#075985 to #e0f2fe)
+  - Export Gas: Green scale (#065f46 to #d1fae5)  
+  - Domestic Gas: Purple scale (#6b21a8 to #f3e8ff)
+  - Flared Gas: Orange scale (#ea580c to #fed7aa)
+• **Typography**: Inter font family with consistent scale
+• **Spacing**: 4px base unit with consistent grid system
+• **Icons**: Lucide React with semantic naming
+• **Status Colors**: Green (normal), Yellow (warning), Red (critical)
+
+6. ROUTING & NAVIGATION HIERARCHY
+-------------------------------------------------------------------------------
+### URL Structure & State Management
+```
+/                                    # Overview dashboard
+/asset/:assetId                      # Asset performance (east|west)
+/asset/:assetId/hub/:hubId           # Production hub detail
+/facility/:facilityId                # Facility KPIs and wells
+/well/:wellId                        # Individual well performance
+/terminal/:terminalId                # Terminal operations
+/gaps                                # Gap analysis dashboard
+/optimization                        # Recommendations & simulation
+/analytics                           # Performance analytics
+```
+
+### URL State Management
+• **Filter State**: Embedded in URL parameters (timeframe, network, status)
+• **Navigation State**: Breadcrumb trail with context preservation
+• **Deep Linking**: All dashboard states shareable via URL
+• **Back/Forward**: Browser navigation with state restoration
+
+7. STATE MANAGEMENT & REAL-TIME DATA
+-------------------------------------------------------------------------------
+### React Query Configuration
+• **Polling Strategy**: 60-second intervals for production data
+• **Cache Strategy**: 30s stale time, 10min garbage collection
+• **Background Updates**: Silent refetch on window focus
+• **Optimistic Updates**: Immediate UI feedback for actions
+• **Error Boundaries**: Query-level error isolation
+
+### Data Freshness Strategy
+• **Real-time KPIs**: ≤ 1 min freshness from Redis cache
+• **Historical Trends**: Hourly/daily aggregation from Postgres
+• **Predictive Data**: Updated on model runs (configurable intervals)
+• **Freshness Indicators**: Visual timestamps and data age warnings
+
+### Local State Management
+• **URL Parameters**: Filter and navigation state
+• **Component State**: UI interactions and form data
+• **Context**: User preferences and role-based permissions
+• **Session Storage**: Temporary data and draft states
+
+8. PERFORMANCE & RELIABILITY REQUIREMENTS
+-------------------------------------------------------------------------------
+### Performance Targets
+• **Initial Load**: < 2s for dashboard on 3G connection
+• **Navigation**: < 500ms for cached route transitions
+• **API Response**: P95 ≤ 500ms for cached KPIs, ≤ 1.5s for aggregates
+• **Bundle Size**: < 1MB initial JS bundle, code splitting for routes
+• **Lighthouse Score**: 90+ Performance, 100 Accessibility, 90+ Best Practices
+
+### Reliability Requirements
+• **Availability**: 99.5% uptime target with graceful degradation
+• **Error Recovery**: Automatic retry with exponential backoff
+• **Offline Capability**: Service worker for critical dashboard functionality
+• **Progressive Loading**: Skeleton screens with incremental data loading
+• **Memory Management**: Efficient cleanup of query caches and subscriptions
+
+9. SECURITY & COMPLIANCE INTEGRATION
+-------------------------------------------------------------------------------
+### Authentication & Authorization (P6 Phase)
+• **Identity Provider**: Azure Entra ID with OIDC/OAuth 2.0
+• **Client Library**: MSAL.js v3 for token management
+• **Role-Based Access**: UI features hidden based on user roles
+• **Token Security**: Secure storage with automatic refresh
+• **Session Management**: Idle timeout and concurrent session handling
+
+### Security Features
+• **Content Security Policy**: Strict CSP headers for XSS protection
+• **Data Validation**: Client-side Zod validation matching backend contracts
+• **Audit Trail**: User action logging for sensitive operations
+• **Secure Communication**: HTTPS only with certificate pinning
+• **Sensitive Data**: No storage of credentials or sensitive data in browser
+
+### Compliance Requirements
+• **Data Residency**: EU/US data handling per enterprise policy
+• **Access Logging**: Detailed audit logs for regulatory compliance
+• **Data Masking**: Sensitive field protection in UI
+• **Retention Policies**: Client-side data cleanup per retention schedules
+
+10. TESTING STRATEGY & QUALITY GATES
+-------------------------------------------------------------------------------
+### Testing Pyramid
+• **Unit Tests**: 80%+ coverage for utilities, hooks, and pure components
+• **Integration Tests**: API integration with MSW mock validation
+• **Component Tests**: React Testing Library for user interactions
+• **E2E Tests**: Cypress for critical user journeys
+• **Contract Tests**: Zod schema validation against OpenAPI specs
+
+### Quality Gates
+• **Type Safety**: Zero TypeScript errors with strict mode
+• **Accessibility**: WCAG 2.1 AA compliance verified by axe-core
+• **Performance**: Bundle size budgets and Lighthouse CI checks
+• **Security**: Static analysis with ESLint security rules
+• **Code Quality**: Prettier formatting and ESLint compliance
+
+### Test Environment Strategy
+• **Development**: MSW with comprehensive mock data
+• **Integration**: Backend contract tests with real API schemas
+• **Staging**: Full integration with staging backend services
+• **Production**: Real user monitoring and error tracking
+
+11. DEPLOYMENT & ENVIRONMENT STRATEGY
+-------------------------------------------------------------------------------
+### Environment Configuration
+• **Development**: Local Vite dev server with MSW mocking
+• **Testing**: Azure Static Web Apps preview deployments
+• **Staging**: Full integration with staging backend APIs
+• **Production**: Azure Static Web Apps with CDN and custom domain
+
+### CI/CD Pipeline
+• **Build Pipeline**: GitHub Actions with Node.js 18+
+• **Quality Gates**: Lint, type check, test, build, security scan
+• **Deployment**: Automatic deployment on main branch merge
+• **Rollback**: Blue-green deployment with instant rollback capability
+• **Monitoring**: Real User Monitoring with Application Insights
+
+### Configuration Management
+• **Environment Variables**: VITE_* prefix for build-time configuration
+• **Feature Flags**: Runtime feature toggles for gradual rollouts
+• **API Endpoints**: Environment-specific backend URLs
+• **Cache Strategy**: CDN cache headers and invalidation rules
+
+12. OBSERVABILITY & MONITORING
+-------------------------------------------------------------------------------
+### Frontend Monitoring
+• **Application Insights**: Page views, user flows, performance metrics
+• **Error Tracking**: Unhandled exceptions with stack traces and context
+• **Performance Monitoring**: Core Web Vitals and custom metrics
+• **User Analytics**: Feature usage and user journey analysis
+• **Real User Monitoring**: Actual user performance in production
+
+### Debugging & Diagnostics
+• **React DevTools**: Component tree and state inspection
+• **Query DevTools**: TanStack Query cache and network inspection
+• **Console Logging**: Structured logging with correlation IDs
+• **Error Boundaries**: Component-level error isolation with reporting
+• **Health Checks**: Frontend health endpoint for uptime monitoring
+
+13. PHASED DELIVERY ALIGNMENT
+-------------------------------------------------------------------------------
+### P1: Contracts & Mocks (Current)
+✅ React SPA with comprehensive MSW mocking
+✅ Component library with design system
+✅ Routing and navigation hierarchy
+✅ Zod schemas aligned with backend contracts
+✅ Testing framework with high coverage
+
+### P2: Backend Integration
+🔄 Replace MSW with real FastAPI backend calls
+🔄 Implement error handling and retry logic
+🔄 Add data freshness indicators and loading states
+🔄 Performance optimization and caching strategy
+
+### P3: Terminal & Pipeline Features  
+🔄 Enhanced terminal operations dashboard
+🔄 Pipeline constraint visualization
+🔄 Cargo scheduling and endurance forecasting
+
+### P4: Predictive Intelligence
+🔄 Gap prediction and early warning systems
+🔄 Constraint detection with automatic alerts
+🔄 Advanced analytics and trending
+
+### P5: Optimization & Simulation
+🔄 Recommendation review and approval workflow
+🔄 What-if scenario simulation interface
+🔄 Outcome tracking and learning feedback
+
+### P6: Security & Governance Hardening
+🔄 Entra ID integration with MSAL.js
+🔄 Role-based access control implementation
+🔄 Audit logging and compliance features
+🔄 Production monitoring and SLO dashboards
+
+14. DEFINITION OF DONE (DoD)
+-------------------------------------------------------------------------------
+### Feature Completion Criteria
+✅ **Functionality**: All user stories completed with acceptance criteria met
+✅ **Design**: UI/UX approved with design system compliance
+✅ **Testing**: Unit tests ≥80%, integration tests for API calls, E2E for journeys
+✅ **Performance**: Meets performance budgets and Lighthouse scores
+✅ **Accessibility**: WCAG 2.1 AA compliance verified
+✅ **Security**: Security review completed, vulnerabilities addressed
+✅ **Documentation**: Technical documentation and user guides updated
+✅ **Code Quality**: Type-safe, linted, formatted, and reviewed
+✅ **Deployment**: Successfully deployed to staging and validated
+✅ **Monitoring**: Observability instrumentation in place
+
+### Sprint/Release Criteria
+✅ **Contract Alignment**: API contracts validated with backend team
+✅ **Cross-browser Testing**: Chrome, Firefox, Safari, Edge compatibility
+✅ **Responsive Design**: Mobile, tablet, desktop layouts tested
+✅ **Data Integration**: Real data flows tested in staging environment
+✅ **User Acceptance**: Stakeholder sign-off from target user groups
+✅ **Production Readiness**: Monitoring, alerting, and rollback procedures ready
+
+===============================================================================
+This TRS serves as the primary technical reference for frontend development,
+aligned with the Production Intelligence Platform architecture and business 
+objectives. All implementation decisions should reference this document and
+the corresponding backend SYSTEM_ARCHITECTURE.md for integration points.
+=============================================================================== 

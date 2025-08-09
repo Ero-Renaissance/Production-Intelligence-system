@@ -201,7 +201,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
         {/* Role-specific entries (POC placeholders) */}
         <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4 space-y-1">
           <NavLink
-            to="/performance/targets"
+            to="/targets"
             className={({ isActive }) => `
               group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150
               ${isActive ? 'bg-brand-green text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'}
@@ -214,7 +214,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
           </NavLink>
 
           <NavLink
-            to="/programming/optimisation"
+            to="/optimisation"
             className={({ isActive }) => `
               group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150
               ${isActive ? 'bg-brand-green text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'}
