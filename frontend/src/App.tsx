@@ -20,6 +20,8 @@ import { OptimisationSimulation } from './pages/OptimisationSimulation';
 import { WellDetail } from './pages/WellDetail';
 import { AppShell } from './components/Layout/AppShell';
 import { UserProvider } from './context/UserContext';
+import { SettingsPage } from './pages/Settings';
+import { NotFoundPage } from './pages/NotFound';
 
 export const App: React.FC = () => {
   return (
@@ -36,6 +38,8 @@ export const App: React.FC = () => {
                 <Route path="/well/:wellId" element={<WellDetail />} />
                 <Route path="/targets" element={<Targets />} />
                 <Route path="/optimisation" element={<OptimisationSimulation />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
           </AppShell>
